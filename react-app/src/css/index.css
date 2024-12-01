@@ -1,0 +1,30 @@
+h1{
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+.city{
+    padding:20px;
+    border-radius: 50%;
+    height: 250px;
+    width: 2;
+    object-position: center;
+    object-fit: cover;
+    height: 100px;
+    box-shadow: 1px 1px 5px rgba(0, 0,0,0.3);
+    margin-bottom: 50px;
+}
+.cities{
+    display: inline-block;
+}
+.background-section {
+    background-image: url('../img/bg.png');
+    background-size: cover;
+    background-position: center;
+    height: 400px;
+    position: relative;
+    overflow: hidden;
+}
+#searchbox{
+    width: 200px;
+}

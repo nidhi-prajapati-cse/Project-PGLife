@@ -1,0 +1,116 @@
+<div class="modal fade" id="signup-modal" tabindex="-1" role="dialog" aria-labelledby="signup-heading" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="signup-heading">Signup with PGLife</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <form id="signup-form" class="form" role="form" method="post" action="api/signup_submit.php">
+                    <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                <i class="fas fa-user"></i>
+                            </span>
+                        </div>
+                        <input type="text" class="form-control" name="full_name" placeholder="Full Name" maxlength="30" required>
+                    </div>
+
+                    <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                <i class="fas fa-phone-alt"></i>
+                            </span>
+                        </div>
+                        <input type="text" class="form-control" name="phone" placeholder="Phone Number" maxlength="10" minlength="10" required>
+                    </div>
+
+                    <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                <i class="fas fa-envelope"></i>
+                            </span>
+                        </div>
+                        <input type="email" class="form-control" name="email" placeholder="Email" required>
+                    </div>
+
+                    <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                <i class="fas fa-lock"></i>
+                            </span>
+                        </div>
+                        <input type="password" class="form-control" name="password" placeholder="Password" minlength="6" required>
+                    </div>
+
+                    <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">
+                                <i class="fas fa-university"></i>
+                            </span>
+                        </div>
+                        <input type="text" class="form-control" name="college_name" placeholder="College Name" maxlength="150" required>
+                    </div>
+
+                    <div class="form-group">
+                        <span>I'm a</span>
+                        <input type="radio" class="ml-3" id="gender-male" name="gender" value="male" /> Male
+                        <label for="gender-male">
+                        </label>
+                        <input type="radio" class="ml-3" id="gender-female" name="gender" value="female" />
+                        <label for="gender-female">
+                            Female
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <button id="submit-button" type="submit" class="btn btn-block btn-primary">Create Account</button>
+                    </div>
+                </form>
+
+                <script>
+                        let isSubmitting = false;
+                
+                        document.getElementById("signup-form").addEventListener("submit", function(event) {
+                            event.preventDefault(); // Prevent default form submission
+
+                            if (isSubmitting) return; // Prevent multiple submissions
+                            isSubmitting = true; // Set flag to prevent further submissions
+                        
+                            const formData = new FormData(this);
+                        
+                            // Use Fetch API for the AJAX call
+                            fetch('path/to/your/registration/script.php', {
+                                method: 'POST',
+                                body: formData
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                alert(data.message); // Show the message from the server
+                                isSubmitting = false; // Reset flag after response
+                                if (data.success) {
+                                    // Optionally redirect or clear the form
+                                    // window.location.href = 'some_page.php'; // Redirect example
+                                    // document.getElementById("registerForm").reset(); // Reset form
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                isSubmitting = false; // Reset flag in case of error
+                            });
+                        });
+                </script>
+            </div>
+
+            
+            <div class="modal-footer">
+                <span>Already have an account?
+                    <a href="#" data-dismiss="modal" data-toggle="modal" data-target="#login-modal">Login</a>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>

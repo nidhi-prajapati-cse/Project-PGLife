@@ -8,6 +8,7 @@ PGLife is a web-based platform that helps students find paying guest accommodati
 - Filter PGs based on budget and gender
 - User login and authentication
 - marking a property as favourite
+- book and unbook a pg
 
 ## Technologies Used:
 - Frontend: HTML, CSS, Bootstrap, JavaScript

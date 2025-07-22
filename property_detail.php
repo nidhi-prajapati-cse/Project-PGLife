@@ -1,4 +1,6 @@
+
 <?php
+
 session_start();
 require "includes/database_connect.php";
 
@@ -50,6 +52,22 @@ if (!$result_4) {
 }
 $interested_users = mysqli_fetch_all($result_4, MYSQLI_ASSOC);
 $interested_users_count = mysqli_num_rows($result_4);
+
+$isBooked= false;
+
+if (isset($_SESSION['user_id']) && isset($_GET['property_id'])) {
+    $userId = $_SESSION['user_id'];
+    $propertyId = $_GET['property_id'];
+
+    $stmt = $conn->prepare("SELECT * FROM booked_users_properties WHERE user_id = ? AND property_id = ?");
+    $stmt->bind_param("ii", $userId, $propertyId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    $isBooked = $result->num_rows > 0;
+
+    $stmt->close();
+}
 ?>
 
 <!DOCTYPE html>
@@ -58,17 +76,23 @@ $interested_users_count = mysqli_num_rows($result_4);
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= $property['property_name']; ?> | PG Life</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
     <?php
     include "includes/head_links.php";
     ?>
     <link href="css/property_detail.css" rel="stylesheet" />
 </head>
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <body>
     <?php
     include "includes/header.php";
     ?>
+    <script>
+    const PROPERTY_ID = <?= $property_id ?>;
+    const IS_LOGGED_IN = <?= isset($_SESSION['user_id']) ? 'true' : 'false' ?>;
+    </script>
+    
 
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb py-2">
@@ -192,10 +216,27 @@ $interested_users_count = mysqli_num_rows($result_4);
                 <div class="rent">₹ <?= number_format($property['rent']) ?>/-</div>
                 <div class="rent-unit">per month</div>
             </div>
-            <div class="button-container col-6">
-                <button id="bookBtn" class="btn btn-primary">Book Now</button>
-                
-            </div>
+            <?php if (isset($_SESSION['user_id'])) { ?>
+    <!-- Logged-in user sees real book button -->
+    <div class="button-container col-6">
+        <button id="bookBtn" class="btn <?php echo $isBooked ? 'btn-danger' : 'btn-primary'; ?>">
+        <?php echo $isBooked ? 'Unbook' : 'Book Now'; ?>
+    </button>
+    </div>
+<?php } else { ?>
+    <!-- Not logged-in user sees a fake button that opens login modal -->
+    <div class="button-container col-6">
+        <button 
+            class="btn btn-primary" 
+            data-toggle="modal" 
+            data-target="#login-modal"
+        >
+            Book Now
+        </button>
+    </div>
+<?php } ?>
+
+
         </div>
         <div class="row no-gutters">
             <div class="phone-number">
@@ -426,9 +467,13 @@ $interested_users_count = mysqli_num_rows($result_4);
     include "includes/footer.php";
     ?>
 
-    <script type="text/javascript" src="js/property_detail.js"></script>
+    <script src="js/property_detail.js?v=<?= time(); ?>"></script>
+
     <script type="text/javascript" src="js/common.js"></script>
     <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    
+
+
 
 </body>
 
